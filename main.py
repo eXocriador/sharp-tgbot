@@ -1,12 +1,16 @@
 import logging
 import random
 import os
+from dotenv import load_dotenv
 
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, ContextTypes,
     MessageHandler, filters
 )
+
+# Завантаження змінних оточення з .env
+load_dotenv()
 
 logging.basicConfig(
     filename=os.path.join(os.path.dirname(__file__), 'bot.log'),
@@ -78,8 +82,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "2️⃣ В личке — отвечаю на любые сообщения.\n"
         "3️⃣ Получи SHARP предсказание + мемный стикер.\n\n"
         "✨ *Новые фичи*: токсичные предсказания и рандомные стикеры.\n\n"
-        "⚠️ Внимание: вопросы логируются без текста, для улучшения бота."
-        , parse_mode="Markdown"
+        "⚠️ Внимание: вопросы логируются без текста, для улучшения бота.",
+        parse_mode="Markdown"
     )
 
 async def predict(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -120,9 +124,14 @@ async def predict(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await message.reply_text(f"🔮 *Предсказание*: {prediction}", parse_mode="Markdown")
     await message.reply_sticker(sticker_id)
 
+def get_token_from_env():
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    if not token:
+        raise RuntimeError("TELEGRAM_BOT_TOKEN не знайдено у .env або змінних оточення!")
+    return token
 
 def main():
-    TOKEN = "ВАШ_ТОКЕН"
+    TOKEN = get_token_from_env()
 
     app = ApplicationBuilder().token(TOKEN).build()
 

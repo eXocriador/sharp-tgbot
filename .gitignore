@@ -1,3 +1,7 @@
+# Не відслідковувати .env з токенами та секретами
+.env
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -66,3 +70,4 @@ compiled/
 
 # Pyre type checker
 .pyre/
+
